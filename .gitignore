@@ -1,0 +1,17 @@
+# Rust build artifacts
+back/target/
+back/Cargo.lock
+
+# SQLite database (generated — run convert_northwind.py to recreate)
+back/northwind.db
+
+# Node.js
+front/node_modules/
+front/.next/
+front/.env.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
