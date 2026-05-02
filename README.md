@@ -4,6 +4,10 @@ A full-stack web application for managing customers and suppliers, built with a 
 
 ---
 
+## Watch the full Demo
+
+- **Peter-Dubin_Rust-practice_Customer-management**: https://drive.google.com/file/d/125WkKiVvaxNhsa30l_m7gJdWyEO4G4c3/view?usp=sharing
+
 ## Architecture Overview
 
 ```
