@@ -1,25 +1,32 @@
-### Variables globales
+### Global variables
 @baseUrl = http://localhost:8001
 
-### Obtener todos los clientes (sin filtros)
+# =============================================================================
+# CUSTOMERS
+# =============================================================================
+
+### List all customers (no filters)
 GET {{baseUrl}}/customers
 
-### Obtener clientes con paginación
+### List customers with pagination
 GET {{baseUrl}}/customers?page=2&per_page=5
 
-### Obtener clientes filtrados por nombre
+### List customers filtered by company name
 GET {{baseUrl}}/customers?name_filter=Zajazd
 
-### Obtener clientes ordenados por compañía descendente
+### List customers sorted by company name descending
 GET {{baseUrl}}/customers?order_by=CompanyName&order_direction=DESC
 
-### Combinación de filtros
+### List customers — combined filters (page, size, search, sort)
 GET {{baseUrl}}/customers?page=1&per_page=5&name_filter=a&order_by=CompanyName&order_direction=ASC
 
-### Obtener un cliente específico
-GET {{baseUrl}}/customers/ALFKI11noexiste
+### Get a specific customer by ID
+GET {{baseUrl}}/customers/ALFKI
 
-### Crear un nuevo cliente
+### Get a customer that does not exist (expects 404)
+GET {{baseUrl}}/customers/DOESNOTEXIST
+
+### Create a new customer
 POST {{baseUrl}}/customers
 Content-Type: application/json
 
@@ -37,12 +44,11 @@ Content-Type: application/json
     "fax": "098-765-4321"
 }
 
-### Actualizar un cliente existente
+### Update an existing customer
 PUT {{baseUrl}}/customers/DEMO1
 Content-Type: application/json
 
 {
-    "customer_id": "DEMO1",
     "company_name": "Updated Company Name",
     "contact_name": "Jane Doe",
     "contact_title": "CTO",
@@ -55,5 +61,70 @@ Content-Type: application/json
     "fax": "123-456-7890"
 }
 
-### Eliminar un cliente
-DELETE {{baseUrl}}/customers/DEMO1 
+### Delete a customer
+DELETE {{baseUrl}}/customers/DEMO1
+
+
+# =============================================================================
+# SUPPLIERS
+# =============================================================================
+
+### List all suppliers (no filters)
+GET {{baseUrl}}/suppliers
+
+### List suppliers with pagination
+GET {{baseUrl}}/suppliers?page=1&per_page=5
+
+### List suppliers filtered by company name
+GET {{baseUrl}}/suppliers?name_filter=Tokyo
+
+### List suppliers sorted by company name ascending
+GET {{baseUrl}}/suppliers?order_by=CompanyName&order_direction=ASC
+
+### List suppliers — combined filters (page, size, search, sort)
+GET {{baseUrl}}/suppliers?page=1&per_page=5&name_filter=e&order_by=CompanyName&order_direction=ASC
+
+### Get a specific supplier by ID
+GET {{baseUrl}}/suppliers/1
+
+### Get a supplier that does not exist (expects 404)
+GET {{baseUrl}}/suppliers/99999
+
+### Create a new supplier (supplier_id is auto-generated)
+POST {{baseUrl}}/suppliers
+Content-Type: application/json
+
+{
+    "company_name": "Demo Supplier Co.",
+    "contact_name": "Alice Smith",
+    "contact_title": "Sales Manager",
+    "address": "789 Trade Blvd",
+    "city": "Chicago",
+    "region": "IL",
+    "postal_code": "60601",
+    "country": "USA",
+    "phone": "312-555-0100",
+    "fax": "312-555-0101",
+    "home_page": "https://demosupplier.example.com"
+}
+
+### Update an existing supplier (use the ID returned from the POST above)
+PUT {{baseUrl}}/suppliers/30
+Content-Type: application/json
+
+{
+    "company_name": "Updated Supplier Co.",
+    "contact_name": "Bob Johnson",
+    "contact_title": "Account Director",
+    "address": "101 Commerce St",
+    "city": "New York",
+    "region": "NY",
+    "postal_code": "10001",
+    "country": "USA",
+    "phone": "212-555-0200",
+    "fax": "212-555-0201",
+    "home_page": "https://updatedsupplier.example.com"
+}
+
+### Delete a supplier
+DELETE {{baseUrl}}/suppliers/30

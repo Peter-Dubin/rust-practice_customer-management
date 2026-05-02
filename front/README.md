@@ -1,38 +1,75 @@
-# Customer Management Frontend
+# Frontend — Customer Management UI
 
-This is a React-based frontend application that provides a user interface for managing customer data. It connects to a Rust/Rocket backend API to perform CRUD operations on customer records.
+Next.js 14 application (App Router) that provides the browser interface for managing customers and suppliers. Communicates with the Rust/Rocket API at `http://localhost:8001`.
 
-## Features
+**Runs on:** `http://localhost:3000`
 
-- View list of customers with pagination and sorting
-- Search customers by company name
-- View detailed customer information
-- Add new customers 
-- Edit existing customer details
-- Delete customers
-- Responsive design for desktop and mobile
+---
 
-## Technical Details
+## Tech Stack
 
-- Built with React and TypeScript
-- Fetch for API communication
-- Form handling with React Hook Form
+| Package | Version | Purpose |
+|---------|---------|---------|
+| Next.js | 14.2 | React framework + App Router |
+| React | 18 | UI runtime |
+| TypeScript | 5 | Type safety |
+| MUI (Material UI) | v5 | Component library |
+| React Hook Form | v7 | Form state and validation |
 
-## Running the Project
+---
 
-1. Make sure you have Node.js and npm installed
-2. Clone the repository
-3. Run `npm install` to install dependencies
-4. Make sure you have the `.env` file with the `API_URL` and backend API is running (see backend README)
-5. Run `npm start` to start the development server
-6. Frontend will be available at `http://localhost:3000`
+## Pages
 
-## API Integration
+| Route | Description |
+|-------|-------------|
+| `/` | Home — navigation landing page |
+| `/customers` | Customer list with search, sort, pagination, add/edit/delete |
+| `/customers/[id]` | Customer detail view |
+| `/suppliers` | Supplier list with search, sort, pagination, add/edit/delete |
 
-The frontend connects to the backend API running at `http://localhost:8001` and utilizes the following endpoints:
+---
 
-- GET /customers - List customers with pagination/filtering
-- GET /customers/{id} - Get single customer
-- POST /customers - Create customer
-- PUT /customers/{id} - Update customer
-- DELETE /customers/{id} - Delete customer
+## Source Layout
+
+```
+src/
+├── app/
+│   ├── layout.tsx            # Root layout with NavigationTabs
+│   ├── page.tsx              # Home page
+│   ├── customers/
+│   │   ├── page.tsx          # Customer list page
+│   │   └── [id]/page.tsx     # Customer detail page
+│   └── suppliers/
+│       └── page.tsx          # Supplier list page
+├── components/
+│   ├── CustomerTable.tsx     # MUI DataGrid-style table for customers
+│   ├── CustomerForm.tsx      # Create / edit customer dialog
+│   ├── SupplierTable.tsx     # MUI DataGrid-style table for suppliers
+│   ├── SupplierForm.tsx      # Create / edit supplier dialog
+│   ├── ConfirmDialog.tsx     # Generic delete confirmation dialog
+│   └── NavigationTabs.tsx    # Top-level tab navigation
+├── lib/
+│   └── api.ts                # All fetch calls to the backend API
+└── types/
+    ├── customer.ts           # Customer TypeScript interfaces
+    └── supplier.ts           # Supplier TypeScript interfaces
+```
+
+---
+
+## Running Locally
+
+```bash
+# From the front/ directory
+npm install
+cp .env.example .env.local    # configure NEXT_PUBLIC_API_URL
+npm run dev
+```
+
+The backend must be running before starting the frontend. See [../back/README.md](../back/README.md).
+
+### Environment variables
+
+| Variable | Example value | Description |
+|----------|---------------|-------------|
+| `NEXT_PUBLIC_API_URL` | `http://localhost:8001` | Backend API base URL |

@@ -1,65 +1,97 @@
 # Customer Management Application
 
-This is a full-stack web application for managing customer data, consisting of a Next.js frontend and a Rust backend API.
+A full-stack web application for managing customers and suppliers, built with a **Rust/Rocket** REST API backend and a **Next.js 14** frontend. Data is persisted in a SQLite (Northwind) database.
 
-## Frontend (Next.js)
+---
 
-The frontend is built with Next.js and provides a modern, responsive user interface for managing customer records.
+## Architecture Overview
 
-### Features
+```
+customer_management/
+├── back/       # Rust + Rocket REST API  (port 8001)
+└── front/      # Next.js 14 + MUI frontend (port 3000)
+```
 
-- Customer list view with pagination
-- Search customers by company name
-- Sort customers by different fields
-- Add new customers
-- Edit existing customers 
-- Delete customers
-- Responsive design
+**Backend stack:** Rust · Rocket 0.5 · rusqlite 0.31 · serde · rocket_cors
 
-### Technical Details
+**Frontend stack:** Next.js 14 · React 18 · TypeScript 5 · MUI v5 · React Hook Form v7
 
-- Built with Next.js and React
-- Material-UI components for consistent styling
-- Axios for API communication
-- Form validation and error handling
-- State management with React hooks
-- TypeScript for type safety
+---
 
-## Backend (Rust)
+## Features
 
-The backend is a RESTful API built with Rust and the Rocket framework that provides customer management functionality. It connects to a SQLite database (Northwind) and implements CRUD operations.
+### Customers
+- List all customers with pagination, search by company name, and multi-column sorting
+- View, create, edit, and delete individual customer records
 
-### Features
+### Suppliers
+- List all suppliers with pagination, search by company name, and multi-column sorting
+- View, create, edit, and delete individual supplier records
 
-- Get all customers with pagination, filtering and sorting
-- Get a single customer by ID
-- Create new customers
-- Update existing customers
-- Delete customers
-- CORS enabled for cross-origin requests
+---
 
-### Technical Details
+## API Endpoints
 
-- Built with Rust and Rocket web framework
-- SQLite database with rusqlite for data persistence
-- JSON serialization/deserialization with serde
-- Thread-safe database access with Mutex
-- Error handling and input validation
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/customers` | List customers (pagination, filter, sort) |
+| GET | `/customers/{id}` | Get customer by ID |
+| POST | `/customers` | Create a customer |
+| PUT | `/customers/{id}` | Update a customer |
+| DELETE | `/customers/{id}` | Delete a customer |
+| GET | `/suppliers` | List suppliers (pagination, filter, sort) |
+| GET | `/suppliers/{id}` | Get supplier by ID |
+| POST | `/suppliers` | Create a supplier |
+| PUT | `/suppliers/{id}` | Update a supplier |
+| DELETE | `/suppliers/{id}` | Delete a supplier |
 
-## Running the Project
+Query parameters for list endpoints: `page`, `per_page`, `name_filter`, `order_by`, `order_direction`
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Rust + Cargo](https://rustup.rs/)
+- [Node.js 18+](https://nodejs.org/) and npm
 
 ### Backend
-1. Make sure you have Rust and Cargo installed
-2. Navigate to the `back` directory
-3. Place the Northwind SQLite database file in the project root
-4. Run `cargo run` to start the server
-5. API will be available at `http://localhost:8001`
+
+```bash
+cd back
+cargo run
+# API available at http://localhost:8001
+```
+
+> The Northwind SQLite database (`northwind.db`) must be present in the `back/` directory.
 
 ### Frontend
-1. Make sure you have Node.js installed
-2. Navigate to the `front` directory
-3. Install dependencies with `npm install`
-4. For development, copy `.env.example` to `.env`
-5. Run `npm run dev` to start the development server
-6. Access the application at `http://localhost:3000`
 
+```bash
+cd front
+npm install
+cp .env.example .env.local   # set NEXT_PUBLIC_API_URL=http://localhost:8001
+npm run dev
+# App available at http://localhost:3000
+```
+
+---
+
+## Project Structure
+
+```
+back/src/
+├── main.rs      # Rocket setup, CORS, routes registration
+├── models.rs    # Customer / Supplier structs + query params
+├── routes.rs    # HTTP route handlers
+└── db.rs        # Database access layer (rusqlite)
+
+front/src/
+├── app/
+│   ├── customers/   # Customers list page + detail page
+│   └── suppliers/   # Suppliers list page
+├── components/      # CustomerTable, CustomerForm, SupplierTable, SupplierForm, etc.
+├── types/           # TypeScript interfaces (Customer, Supplier)
+└── lib/api.ts       # Fetch wrapper for all API calls
+```
