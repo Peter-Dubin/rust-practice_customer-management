@@ -1,4 +1,5 @@
 import { Customer, CustomerQuery, PaginatedResponse } from '@/types/customer';
+import { CreateSupplierRequest, Supplier, SupplierQuery, UpdateSupplierRequest } from '@/types/supplier';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8001';
 
@@ -40,5 +41,31 @@ export const api = {
 
   deleteCustomer(id: string): Promise<void> {
     return request(`/customers/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  },
+
+  listSuppliers(q: SupplierQuery = {}): Promise<PaginatedResponse<Supplier>> {
+    const params = new URLSearchParams();
+    if (q.page)            params.set('page', String(q.page));
+    if (q.per_page)        params.set('per_page', String(q.per_page));
+    if (q.name_filter)     params.set('name_filter', q.name_filter);
+    if (q.order_by)        params.set('order_by', q.order_by);
+    if (q.order_direction) params.set('order_direction', q.order_direction);
+    return request(`/suppliers?${params}`);
+  },
+
+  getSupplier(id: number): Promise<Supplier> {
+    return request(`/suppliers/${id}`);
+  },
+
+  createSupplier(data: CreateSupplierRequest): Promise<Supplier> {
+    return request('/suppliers', { method: 'POST', body: JSON.stringify(data) });
+  },
+
+  updateSupplier(id: number, data: UpdateSupplierRequest): Promise<void> {
+    return request(`/suppliers/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  },
+
+  deleteSupplier(id: number): Promise<void> {
+    return request(`/suppliers/${id}`, { method: 'DELETE' });
   },
 };

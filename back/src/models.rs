@@ -60,3 +60,58 @@ pub struct CustomerQuery {
     pub order_by: Option<String>,
     pub order_direction: Option<String>,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Supplier {
+    pub supplier_id: i32,
+    pub company_name: String,
+    pub contact_name: Option<String>,
+    pub contact_title: Option<String>,
+    pub address: Option<String>,
+    pub city: Option<String>,
+    pub region: Option<String>,
+    pub postal_code: Option<String>,
+    pub country: Option<String>,
+    pub phone: Option<String>,
+    pub fax: Option<String>,
+    pub home_page: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CreateSupplierRequest {
+    pub company_name: String,
+    pub contact_name: Option<String>,
+    pub contact_title: Option<String>,
+    pub address: Option<String>,
+    pub city: Option<String>,
+    pub region: Option<String>,
+    pub postal_code: Option<String>,
+    pub country: Option<String>,
+    pub phone: Option<String>,
+    pub fax: Option<String>,
+    pub home_page: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateSupplierRequest {
+    pub company_name: String,
+    pub contact_name: Option<String>,
+    pub contact_title: Option<String>,
+    pub address: Option<String>,
+    pub city: Option<String>,
+    pub region: Option<String>,
+    pub postal_code: Option<String>,
+    pub country: Option<String>,
+    pub phone: Option<String>,
+    pub fax: Option<String>,
+    pub home_page: Option<String>,
+}
+
+#[derive(Debug, FromForm)]
+pub struct SupplierQuery {
+    pub page: Option<i64>,
+    pub per_page: Option<i64>,
+    pub name_filter: Option<String>,
+    pub order_by: Option<String>,
+    pub order_direction: Option<String>,
+}

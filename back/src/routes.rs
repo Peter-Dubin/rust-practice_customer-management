@@ -1,7 +1,10 @@
 use rocket::{http::Status, serde::json::Json, State};
 
 use crate::db::Db;
-use crate::models::{CreateCustomerRequest, CustomerQuery, UpdateCustomerRequest};
+use crate::models::{
+    CreateCustomerRequest, CreateSupplierRequest, CustomerQuery, SupplierQuery,
+    UpdateCustomerRequest, UpdateSupplierRequest,
+};
 
 #[get("/customers?<query..>")]
 pub fn list_customers(
@@ -57,6 +60,66 @@ pub fn update_customer(
 #[delete("/customers/<id>")]
 pub fn delete_customer(db: &State<Db>, id: &str) -> Result<Json<serde_json::Value>, Status> {
     match db.delete_customer(id) {
+        Ok(true) => Ok(Json(serde_json::json!({"message": "deleted"}))),
+        Ok(false) => Err(Status::NotFound),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
+#[get("/suppliers?<query..>")]
+pub fn list_suppliers(
+    db: &State<Db>,
+    query: SupplierQuery,
+) -> Result<Json<serde_json::Value>, Status> {
+    let page = query.page.unwrap_or(1).max(1);
+    let per_page = query.per_page.unwrap_or(10).clamp(1, 100);
+
+    db.list_suppliers(
+        page,
+        per_page,
+        query.name_filter.as_deref(),
+        query.order_by.as_deref(),
+        query.order_direction.as_deref(),
+    )
+    .map(|r| Json(serde_json::to_value(r).unwrap()))
+    .map_err(|_| Status::InternalServerError)
+}
+
+#[get("/suppliers/<id>")]
+pub fn get_supplier(db: &State<Db>, id: i32) -> Result<Json<serde_json::Value>, Status> {
+    match db.get_supplier(id) {
+        Ok(Some(s)) => Ok(Json(serde_json::to_value(s).unwrap())),
+        Ok(None) => Err(Status::NotFound),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
+#[post("/suppliers", format = "json", data = "<req>")]
+pub fn create_supplier(
+    db: &State<Db>,
+    req: Json<CreateSupplierRequest>,
+) -> Result<Json<serde_json::Value>, Status> {
+    db.create_supplier(&req.into_inner())
+        .map(|s| Json(serde_json::to_value(s).unwrap()))
+        .map_err(|_| Status::InternalServerError)
+}
+
+#[put("/suppliers/<id>", format = "json", data = "<req>")]
+pub fn update_supplier(
+    db: &State<Db>,
+    id: i32,
+    req: Json<UpdateSupplierRequest>,
+) -> Result<Json<serde_json::Value>, Status> {
+    match db.update_supplier(id, &req.into_inner()) {
+        Ok(true) => Ok(Json(serde_json::json!({"message": "updated"}))),
+        Ok(false) => Err(Status::NotFound),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
+#[delete("/suppliers/<id>")]
+pub fn delete_supplier(db: &State<Db>, id: i32) -> Result<Json<serde_json::Value>, Status> {
+    match db.delete_supplier(id) {
         Ok(true) => Ok(Json(serde_json::json!({"message": "deleted"}))),
         Ok(false) => Err(Status::NotFound),
         Err(_) => Err(Status::InternalServerError),

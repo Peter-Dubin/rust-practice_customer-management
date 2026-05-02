@@ -12,6 +12,7 @@ import {
   createTheme,
 } from '@mui/material';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+import NavigationTabs from '@/components/NavigationTabs';
 
 const theme = createTheme({
   palette: {
@@ -115,6 +116,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               </Typography>
             </Toolbar>
           </AppBar>
+          <NavigationTabs />
           <Container maxWidth="xl">
             <Box sx={{ mt: 3, pb: 5 }}>{children}</Box>
           </Container>

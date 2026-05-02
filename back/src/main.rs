@@ -28,6 +28,11 @@ fn rocket() -> _ {
                 routes::create_customer,
                 routes::update_customer,
                 routes::delete_customer,
+                routes::list_suppliers,
+                routes::get_supplier,
+                routes::create_supplier,
+                routes::update_supplier,
+                routes::delete_supplier,
             ],
         )
 }
